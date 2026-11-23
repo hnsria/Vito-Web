@@ -23,8 +23,18 @@ class PageController extends Controller
     /** Halaman 2 - Tentang saya */
     public function about()
     {
+        $profile = $this->profile();
+
+        // Baris biodata pada lembar partitur (ditampilkan dengan @foreach)
+        $biodata = [
+            ['label' => 'Nama lengkap',   'nilai' => $profile['nama'],           'simbol' => '𝄞'],
+            ['label' => 'Tanggal lahir',  'nilai' => $profile['tanggal_lahir'],  'simbol' => '♩'],
+            ['label' => 'Tempat tinggal', 'nilai' => $profile['tempat_tinggal'], 'simbol' => '♪'],
+        ];
+
         return view('about', [
-            'profile'   => $this->profile(),
+            'profile'   => $profile,
+            'biodata'   => $biodata,
             'interests' => $this->interests(),
         ]);
     }
@@ -47,13 +57,18 @@ class PageController extends Controller
         return [
             'nama'      => 'Vito Riano Hans',
             'panggilan' => 'Hans',
-            'hobi'      => ['musik', 'fotografi', 'teknologi'],
+            // GANTI dengan data asli Anda
+            'tanggal_lahir'  => '11 Mei 2007',
+            'tempat_tinggal' => 'Bakbakan, Gianyar',
+            // taruh foto profil di public/images/profil.jpg lalu ubah nama file di sini
+            'foto'      => 'images/galeri/foto7.jpg',
+            'hobi'      =>['musik', 'fotografi', 'masak', 'game'],
             'instagram' => 'vito_r_hans',
             // GANTI dengan nomor WhatsApp Anda: format internasional, tanpa + dan tanpa 0 di depan
             'whatsapp'  => '6281234567890',
             'tentang'   => [
                 'Saya Hans, seseorang yang menikmati hidup dengan irama yang santai. Hari-hari saya biasanya ditemani musik, kamera, dan rasa ingin tahu pada hal-hal baru.',
-                'Di sini saya merangkum tiga hal yang paling saya sukai. Klik salah satu kartu di bawah untuk melihat cerita dan kemampuan saya lebih detail.',
+                'Di sini saya merangkum Empat hal yang paling saya sukai. Klik salah satu kartu di bawah untuk melihat cerita dan kemampuan saya lebih detail.',
             ],
         ];
     }
@@ -116,19 +131,19 @@ class PageController extends Controller
     {
         return [
             [
-                'slug'      => 'music-moments',
-                'judul'     => 'Music Moments',
-                'deskripsi' => 'My keys and band.',
+                'slug'      => 'momen-musik',
+                'judul'     => 'Momen Musik',
+                'deskripsi' => 'Saat bermain dan menikmati nada.',
                 'foto'      => [
                     ['src' => 'images/galeri/foto1.jpg', 'caption' => 'Christmas'],
                     ['src' => 'images/galeri/foto2.jpg', 'caption' => 'Piano & Keyboard'],
-                    ['src' => 'images/galeri/foto3.jpg', 'caption' => 'Band SMA'],
+                    ['src' => 'images/galeri/foto3.jpg', 'caption' => 'My band'],
                 ],
             ],
             [
-                'slug'      => 'Fotografi',
-                'judul'     => 'Jepretan Asal',
-                'deskripsi' => 'Jepretan hasil mood dari hp.',
+                'slug'      => 'Picture of moments',
+                'judul'     => 'Picture of moments',
+                'deskripsi' => 'Hasil tangan pemula.',
                 'foto'      => [
                     ['src' => 'images/galeri/foto4.jpg', 'caption' => 'Melukat'],
                     ['src' => 'images/galeri/foto5.jpg', 'caption' => 'Batur'],
@@ -137,8 +152,8 @@ class PageController extends Controller
             ],
             [
                 'slug'      => 'fashion-style',
-                'judul'     => 'Outfit of the Day',
-                'deskripsi' => 'My style daily.',
+                'judul'     => 'My Fashion Style',
+                'deskripsi' => 'Little of my style things.',
                 'foto'      => [
                     ['src' => 'images/galeri/foto7.jpg', 'caption' => 'Best outfit'],
                     ['src' => 'images/galeri/foto8.jpg', 'caption' => 'Closer look'],
@@ -146,9 +161,9 @@ class PageController extends Controller
                 ],
             ],
             [
-                'slug'      => 'random',
-                'judul'     => 'Random Pics',
-                'deskripsi' => 'Just random photos.',
+                'slug'      => 'Random Pic',
+                'judul'     => 'Random Pic',
+                'deskripsi' => 'Just random.',
                 'foto'      => [
                     ['src' => 'images/galeri/foto10.jpg', 'caption' => 'Mac & Cheese'],
                     ['src' => 'images/galeri/foto11.jpg', 'caption' => 'Hometown'],

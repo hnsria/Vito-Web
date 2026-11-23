@@ -17,6 +17,8 @@
     --line: rgba(31, 107, 255, .32);
     --header-bg: rgba(232, 244, 255, .72);
     --shadow: 0 18px 40px -14px rgba(20, 80, 200, .42);
+    --paper: #f6faff;
+    --paper-shade: #d3e4ff;
     --font: 'Nunito', system-ui, -apple-system, 'Segoe UI', sans-serif;
     --music: 'Noto Music', 'Segoe UI Symbol', 'Symbola', 'Apple Symbols', serif;
 }
@@ -35,6 +37,8 @@
     --line: rgba(140, 180, 255, .22);
     --header-bg: rgba(14, 26, 58, .65);
     --shadow: 0 18px 40px -14px rgba(0, 0, 0, .6);
+    --paper: #13296a;
+    --paper-shade: #0a1c4d;
 }
 
 /* ---------- Dasar ---------- */
@@ -774,3 +778,190 @@ body.no-scroll .site-header {
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+/* =====================================================================
+   Halaman 2 : lembar partitur yang terbuka
+   ===================================================================== */
+.score {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-width: 980px;
+    margin: 0 auto 4.5rem;
+    perspective: 2200px;
+    filter: drop-shadow(0 30px 36px rgba(10, 50, 160, .38));
+    animation: bookRise 1s ease both;
+}
+
+.score-page {
+    position: relative;
+    min-height: 500px;
+    padding: 2.2rem 2.2rem 3.2rem;
+    border: 1px solid var(--card-border);
+    backface-visibility: hidden;
+}
+
+.score-left {
+    display: grid;
+    place-items: center;
+    border-radius: 22px 0 0 22px;
+    background: linear-gradient(to right, var(--paper) 80%, var(--paper-shade));
+    transform-origin: right center;
+    animation: openLeft 1.6s .35s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+.score-right {
+    border-radius: 0 22px 22px 0;
+    background: linear-gradient(to left, var(--paper) 80%, var(--paper-shade));
+    transform-origin: left center;
+    animation: openRight 1.6s .35s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+/* lipatan tengah buku */
+.score-spine {
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 50%;
+    width: 34px;
+    transform: translateX(-50%);
+    background: linear-gradient(90deg, transparent, rgba(10, 40, 130, .3), transparent);
+    pointer-events: none;
+    z-index: 2;
+    animation: riseIn 1s 1.2s both;
+}
+
+.page-no {
+    position: absolute;
+    left: 0; right: 0; bottom: 1rem;
+    text-align: center;
+    font-family: var(--music);
+    font-size: .9rem;
+    color: var(--muted);
+}
+
+/* foto di halaman kiri */
+.photo-frame {
+    position: relative;
+    width: min(290px, 100%);
+    aspect-ratio: 3 / 4;
+    border-radius: 22px;
+    overflow: hidden;
+    border: 6px solid #fff;
+    box-shadow: var(--shadow);
+    transform: rotate(-2deg);
+    animation: riseIn .9s 1.1s both;
+}
+.photo-frame img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+.photo-tag {
+    position: absolute;
+    left: 12px; bottom: 12px;
+    padding: .3rem .9rem;
+    border-radius: 999px;
+    font-weight: 800;
+    color: #0e2552;
+    background: rgba(255, 255, 255, .88);
+}
+
+/* kepala lembar */
+.score-head { text-align: center; }
+.tempo { display: block; font-family: var(--music); font-style: italic; font-size: .95rem; color: var(--muted); text-align: left; }
+.score-head h2 { margin-top: .5rem; font-size: 1.7rem; font-weight: 800; letter-spacing: -.01em; }
+
+/* baris biodata di atas paranada */
+.staff-list { list-style: none; margin: 1.6rem 0 0; padding: 0; display: grid; gap: 1rem; }
+
+.staff-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: .9rem;
+    padding: .5rem 0;
+    animation: riseIn .7s both;
+    animation-delay: calc(1.3s + var(--i, 0) * .18s);
+}
+.staff-row::before {
+    content: "";
+    position: absolute;
+    left: 0; right: 0;
+    top: 50%;
+    height: 33px;
+    transform: translateY(-50%);
+    background: repeating-linear-gradient(to bottom, var(--line) 0 1px, transparent 1px 8px);
+    pointer-events: none;
+}
+.staff-row::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 2px;
+    height: 33px;
+    transform: translateY(-50%);
+    background: var(--line);
+}
+
+.staff-sym {
+    position: relative;
+    flex: none;
+    width: 46px; height: 46px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    font-family: var(--music);
+    font-size: 1.6rem;
+    color: var(--accent);
+    background: var(--paper);
+    box-shadow: 0 0 0 1px var(--line);
+}
+.staff-row > div {
+    position: relative;
+    display: grid;
+    gap: .1rem;
+    padding: .25rem .7rem;
+    border-radius: 10px;
+    background: var(--paper);
+}
+.staff-label { font-size: .72rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.staff-value { font-size: 1.1rem; font-weight: 800; }
+
+.chips { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .15rem; }
+.chip {
+    padding: .2rem .75rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: .88rem;
+    background: color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 1.8rem;
+    font-size: clamp(1.6rem, 3.4vw, 2.2rem);
+    font-weight: 800;
+}
+
+@keyframes bookRise { from { opacity: 0; transform: translateY(40px) scale(.94); } to { opacity: 1; transform: none; } }
+@keyframes openLeft  { from { transform: rotateY(88deg); } to { transform: none; } }
+@keyframes openRight { from { transform: rotateY(-88deg); } to { transform: none; } }
+@keyframes openDown  { from { opacity: 0; transform: rotateX(-60deg) translateY(30px); } to { opacity: 1; transform: none; } }
+
+@media (max-width: 760px) {
+    .score { grid-template-columns: 1fr; }
+    .score-page { min-height: 0; padding: 2rem 1.4rem 3rem; }
+    .score-left { border-radius: 22px 22px 0 0; background: var(--paper); transform-origin: center top; animation: openDown 1.2s .3s cubic-bezier(.22, 1, .36, 1) both; }
+    .score-right { border-radius: 0 0 22px 22px; background: var(--paper); transform-origin: center top; animation: openDown 1.2s .6s cubic-bezier(.22, 1, .36, 1) both; }
+    .score-spine { display: none; }
+    .score-left .page-no { display: none; }
+}
+
+/* =====================================================================
+   Footer tidak boleh mengganggu kartu / pop-up
+   ===================================================================== */
+.site-footer { transition: opacity .3s ease, visibility .3s ease; }
+
+/* saat kartu (halaman 2 & 3) terbuka, footer disembunyikan */
+body.no-scroll .site-footer { opacity: 0; visibility: hidden; }
+
+/* kartu pop-up dan viewer foto dibuat solid agar tidak tembus ke belakang */
+.modal-card,
+.viewer { background: var(--paper); }

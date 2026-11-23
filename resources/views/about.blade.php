@@ -15,6 +15,54 @@
         @endforeach
     </div>
 
+    {{-- Lembar partitur yang terbuka: foto di kiri, biodata di kanan --}}
+    <div class="score" aria-label="Biodata {{ $profile['panggilan'] }}">
+        <article class="score-page score-left">
+            <div class="photo-frame">
+                <img src="{{ asset($profile['foto']) }}" alt="Foto {{ $profile['nama'] }}" draggable="false">
+                <span class="photo-tag">{{ $profile['panggilan'] }}</span>
+            </div>
+            <p class="page-no">&mdash; 1 &mdash;</p>
+        </article>
+
+        <article class="score-page score-right">
+            <header class="score-head">
+                <span class="tempo">♩ = 80 &middot; Andante</span>
+                <h2>Biodata {{ $profile['panggilan'] }}</h2>
+            </header>
+
+            <ul class="staff-list">
+                {{-- LOOPING: baris biodata --}}
+                @foreach ($biodata as $row)
+                    <li class="staff-row" style="--i: {{ $loop->index }}">
+                        <span class="staff-sym" aria-hidden="true">{{ $row['simbol'] }}</span>
+                        <div>
+                            <span class="staff-label">{{ $row['label'] }}</span>
+                            <strong class="staff-value">{{ $row['nilai'] }}</strong>
+                        </div>
+                    </li>
+                @endforeach
+
+                <li class="staff-row" style="--i: {{ count($biodata) }}">
+                    <span class="staff-sym" aria-hidden="true">♬</span>
+                    <div>
+                        <span class="staff-label">Hobi</span>
+                        <span class="chips">
+                            @foreach ($interests as $item)
+                                <span class="chip">{{ $item['ikon'] }} {{ $item['judul'] }}</span>
+                            @endforeach
+                        </span>
+                    </div>
+                </li>
+            </ul>
+            <p class="page-no">&mdash; 2 &mdash;</p>
+        </article>
+
+        <span class="score-spine" aria-hidden="true"></span>
+    </div>
+
+    <h2 class="section-title">Kesukaan <span class="grad">{{ $profile['panggilan'] }}</span></h2>
+
     {{-- LOOPING 2: kartu kesukaan --}}
     <div class="card-grid">
         @foreach ($interests as $item)
